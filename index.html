@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>経理Excelのゼロ</title>
+<meta name="description" content="溜まった記帳と毎月の記帳を、会計ソフトに取り込む形にしてお渡しします。経理17年。お申し込みはココナラから。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@700;900&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* 帳簿の罫線の上に組む。左に見出し、右に本文の2段。数字は等幅で桁をそろえる */
+:root{
+  --paper:#f6f8f8; --ink:#1b2422; --sub:#56625f; --rule:#c9d4d6; --rule-strong:#7f9aa3;
+  --accent:#2c5b7a; --stop:#c23a2f; --card:#ffffff;
+  --display:"Zen Kaku Gothic Antique","BIZ UDPGothic","Hiragino Sans","Yu Gothic",sans-serif;
+  --body:"BIZ UDPGothic","Hiragino Sans","Yu Gothic","Meiryo",sans-serif;
+  --mono:"IBM Plex Mono","BIZ UDGothic",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#121816; --ink:#e4ebe9; --sub:#9fb0ac; --rule:#2c3936; --rule-strong:#4f6670;
+  --accent:#8fbbd6; --stop:#ef7a6f; --card:#18201e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#121816; --ink:#e4ebe9; --sub:#9fb0ac; --rule:#2c3936; --rule-strong:#4f6670;
+  --accent:#8fbbd6; --stop:#ef7a6f; --card:#18201e; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.8;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 64px;display:grid;gap:56px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.35;margin:0}
+p{margin:0}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+header.top{display:grid;gap:20px;border-bottom:2px solid var(--ink);padding-bottom:28px}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:900;font-size:1.05rem;letter-spacing:.04em}
+.mark{width:40px;height:40px;border:2px solid var(--ink);display:grid;place-items:center;font-family:var(--mono);font-weight:600;font-size:1.3rem}
+.top h1{font-size:clamp(1.9rem,5.2vw,3rem);font-weight:900}
+.lead{max-width:40em;color:var(--sub)}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-block;padding:12px 18px;border:2px solid var(--accent);color:var(--accent);text-decoration:none;font-weight:700}
+.btn.primary{background:var(--accent);color:var(--paper)}
+
+.sec{display:grid;grid-template-columns:200px 1fr;gap:24px;border-top:1px solid var(--rule-strong);padding-top:24px}
+.sec>*{min-width:0}
+.sec h2{font-size:1.25rem}
+.sec .label{font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;color:var(--sub);text-transform:uppercase;display:block;margin-bottom:6px}
+.body{display:grid;gap:16px;max-width:42em}
+
+/* 仕訳帳の見本 */
+.ledger{overflow-x:auto;border:1px solid var(--rule-strong);background:var(--card)}
+.ledger table{border-collapse:collapse;width:100%;min-width:560px;font-size:.9rem}
+.ledger th,.ledger td{border:1px solid var(--rule);padding:6px 10px;text-align:left;white-space:nowrap}
+.ledger th{font-weight:700;background:color-mix(in srgb,var(--accent) 8%,var(--card))}
+.ledger td.r{text-align:right}
+.ledger tr.stop td{color:var(--stop)}
+.ledger caption{caption-side:bottom;text-align:left;padding:8px 10px;color:var(--sub);font-size:.8rem}
+
+/* 料金 */
+.prices{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.price{border:1px solid var(--rule-strong);background:var(--card);padding:20px;display:grid;gap:12px;align-content:start}
+.price h3{font-size:1.1rem}
+.price dl{margin:0;display:grid;grid-template-columns:1fr auto;border-top:1px solid var(--rule)}
+.price dt,.price dd{margin:0;padding:6px 0;border-bottom:1px solid var(--rule)}
+.price dd{text-align:right}
+.note{font-size:.85rem;color:var(--sub)}
+
+ol.flow{margin:0;padding:0;list-style:none;display:grid;gap:0;counter-reset:f}
+ol.flow li{counter-increment:f;display:grid;grid-template-columns:44px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--rule)}
+ol.flow li::before{content:counter(f);font-family:var(--mono);font-weight:600;color:var(--accent);font-size:1.1rem}
+ul.plain{margin:0;padding-left:1.2em;display:grid;gap:6px}
+details{border-bottom:1px solid var(--rule);padding:10px 0}
+summary{cursor:pointer;font-weight:700}
+details p{margin-top:8px;color:var(--sub)}
+footer{border-top:2px solid var(--ink);padding-top:16px;color:var(--sub);font-size:.85rem;display:grid;gap:6px}
+
+@media (max-width:720px){.sec{grid-template-columns:1fr;gap:12px}}
+@media (prefers-reduced-motion:no-preference){.btn{transition:background .15s,color .15s}.btn:hover{background:var(--accent);color:var(--paper)}}
+</style>
+<meta property="og:title" content="経理Excelのゼロ">
+<meta property="og:description" content="溜まった記帳と毎月の記帳を、会計ソフトに取り込む形にしてお渡しします。経理17年。お申し込みはココナラから。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://keiri-excel-zero.github.io/">
+</head>
+<body><div class="wrap">
+  <header class="top">
+    <div class="brand"><span class="mark" aria-hidden="true">0</span>経理Excelのゼロ</div>
+    <h1>溜まった記帳を、会計ソフトに入る形にしてお渡しします</h1>
+    <p class="lead">通帳・カードの明細と、領収書・レシートの写真を送っていただくだけです。仕訳を作り、お使いの会計ソフトに取り込むファイルと、同じ中身のExcelの仕訳帳でお渡しします。決めきれない取引は、こちらで決めずに一覧にします。</p>
+    <div class="cta">
+      <a class="btn primary" href="https://coconala.com/services/4443453" target="_blank" rel="noopener">溜まった記帳を頼む（ココナラ）</a>
+      <a class="btn" href="https://coconala.com/services/4418843" target="_blank" rel="noopener">毎月の記帳を頼む（ココナラ）</a>
+    </div>
+    <p class="note">お申し込みとやり取りは、すべてココナラの中で行います。まずは無料の見積り相談からどうぞ。</p>
+  </header>
+
+  <section class="sec" aria-labelledby="s-what">
+    <div><span class="label">What</span><h2 id="s-what">お渡しするもの</h2></div>
+    <div class="body">
+      <ul class="plain">
+        <li>会計ソフトへの取り込み（招待していただいた場合。ID・パスワードはお預かりしません）、または取り込むファイル（弥生会計・マネーフォワード・freee など）</li>
+        <li>同じ中身のExcelの仕訳帳（会計ソフトをお使いでない方や、税理士さんに渡す方に）</li>
+        <li>確認していただきたい取引の一覧（私用かもしれない支払い・何の支払いか分からないもの など）</li>
+        <li>ご自身で取り込む方には、取り込みの手順書</li>
+      </ul>
+      <div class="ledger" role="region" aria-label="仕訳帳の見本" tabindex="0">
+        <table>
+          <thead><tr><th>日付</th><th>借方</th><th class="r">金額</th><th>貸方</th><th>摘要</th></tr></thead>
+          <tbody>
+            <tr><td class="num">2026/07/03</td><td>通信費</td><td class="r num">4,180</td><td>普通預金</td><td>携帯電話 6月分</td></tr>
+            <tr><td class="num">2026/07/10</td><td>消耗品費</td><td class="r num">2,970</td><td>未払金</td><td>文具店 インク</td></tr>
+            <tr><td class="num">2026/07/15</td><td>普通預金</td><td class="r num">110,000</td><td>売上高</td><td>みなと不動産管理 6月分</td></tr>
+            <tr class="stop"><td class="num">2026/07/21</td><td>（確認の一覧へ）</td><td class="r num">3,486</td><td>現金</td><td>スーパー お茶・ビール</td></tr>
+          </tbody>
+          <caption>見本は架空のデータです。赤い行は、こちらで決めずに確認の一覧に入れる取引の例です。</caption>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="s-price">
+    <div><span class="label">Price</span><h2 id="s-price">料金</h2></div>
+    <div class="body" style="max-width:none">
+      <div class="prices">
+        <article class="price">
+          <h3>溜まった記帳を1回で</h3>
+          <dl>
+            <dt>仕訳50件まで</dt><dd class="num">3,000円</dd>
+            <dt>100件まで</dt><dd class="num">5,000円</dd>
+            <dt>300件まで</dt><dd class="num">12,000円</dd>
+            <dt>600件まで</dt><dd class="num">22,000円</dd>
+          </dl>
+          <p class="note">写真のレシート・領収書は50件まで込み。51〜100件は＋2,000円、100件を超えるときは見積り相談で。</p>
+        </article>
+        <article class="price">
+          <h3>毎月の記帳（月額）</h3>
+          <dl>
+            <dt>月の仕訳100件まで</dt><dd class="num">5,000円</dd>
+            <dt>300件までの月</dt><dd class="num">＋7,000円</dd>
+            <dt>600件までの月</dt><dd class="num">＋17,000円</dd>
+          </dl>
+          <p class="note">写真の分は月50件まで込み。超える月は50件ごとに2,000円。</p>
+        </article>
+      </div>
+      <p class="note">料金はココナラの出品ページの料金です。件数が分からないときは、見積り相談で明細の行数とレシートのおよその枚数を教えてください。</p>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="s-flow">
+    <div><span class="label">Flow</span><h2 id="s-flow">進め方</h2></div>
+    <div class="body">
+      <ol class="flow">
+        <li><span>ココナラの見積り相談（無料）で、会計ソフト・対象の期間・資料のおよその量を教えてください。お値段をお伝えします</span></li>
+        <li><span>ご購入の後、ココナラのメッセージで明細と写真を送っていただきます</span></li>
+        <li><span>仕訳を作り、通帳とカードの残高を帳簿と照らします</span></li>
+        <li><span>取り込むファイル・Excelの仕訳帳・確認していただきたい取引の一覧をお渡しします</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="s-who">
+    <div><span class="label">About</span><h2 id="s-who">作っている人</h2></div>
+    <div class="body">
+      <p>経理17年です。税理士事務所で6年半、法人と個人それぞれ30件ほどの月次と決算を担当し、仕訳の最終チェックと判断もしていました。そのあと不動産会社、今はエンタメ業界の会社で経理をしています。</p>
+      <p>仕訳の下書きはAI（Claude）で作り、科目の判断と最後の確認は私がします。AIは学習に使わせない設定で使い、お預かりしたデータはお取引の完了から30日で消します。</p>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="s-no">
+    <div><span class="label">Not</span><h2 id="s-no">お受けしていないこと</h2></div>
+    <div class="body">
+      <ul class="plain">
+        <li>申告書の作成と税金のご相談（税理士の仕事のため）</li>
+        <li>電話・ビデオ通話でのやり取り（メッセージの文字だけです）</li>
+        <li>適格請求書（インボイス）の発行</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="s-faq">
+    <div><span class="label">FAQ</span><h2 id="s-faq">よくある質問</h2></div>
+    <div class="body">
+      <details><summary>会計ソフトを使っていなくても頼めますか？</summary><p>はい。同じ中身のExcelの仕訳帳でお渡しします。税理士さんにそのまま渡せます。</p></details>
+      <details><summary>どの会計ソフトに対応していますか？</summary><p>お使いの会計ソフトの取り込みの形に合わせてお作りします。やよいの青色申告 オンラインとマネーフォワードは、取り込めることを確かめています。最初は数行だけの「試し」で取り込めるのを確かめていただきます。</p></details>
+      <details><summary>会計ソフトへの取り込みもしてもらえますか？</summary><p>はい。お使いの会計ソフトに招待していただければ、取り込みまでこちらでします（招待の機能が使えるかは、ソフトとプランによります）。招待用のメールアドレスはココナラのトークルームでお伝えし、取り込みのためだけに使います。お取引が完了したら、招待は外してください。</p></details>
+      <details><summary>分からない取引はどうなりますか？</summary><p>こちらでは決めずに、確認していただきたい取引の一覧にしてお渡しします。一覧の取引は取り込みません。</p></details>
+    </div>
+  </section>
+
+  <footer>
+    <p>経理Excelのゼロ　｜　お申し込み・お問い合わせはココナラから：<a href="https://coconala.com/users/6296979" target="_blank" rel="noopener">ココナラのプロフィール</a></p>
+    <p>このページではお申し込みを受け付けていません。お取引はすべてココナラの規約のもとで行います。</p>
+  </footer>
+</div>
+</body>
+</html>
