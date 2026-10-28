@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>経理Excelのゼロ</title>
-<meta name="description" content="溜まった記帳と毎月の記帳を、会計ソフトに取り込む形にしてお渡しします。決算・申告書の実務17年以上。お申し込みはココナラから。">
+<meta name="description" content="溜まった記帳と毎月の記帳を、会計ソフトに取り込む形にしてお渡しします。会計ソフトの自動仕訳の確認と直しも。決算・申告書の実務17年以上。お申し込みはココナラから。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@700;900&family=IBM+Plex+Mono:wght@400;600&display=swap">
@@ -58,7 +58,7 @@ header.top{display:grid;gap:20px;border-bottom:2px solid var(--ink);padding-bott
 .ledger caption{caption-side:bottom;text-align:left;padding:8px 10px;color:var(--sub);font-size:.8rem}
 
 /* 料金 */
-.prices{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.prices{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
 .price{border:1px solid var(--rule-strong);background:var(--card);padding:20px;display:grid;gap:12px;align-content:start}
 .price h3{font-size:1.1rem}
 .price dl{margin:0;display:grid;grid-template-columns:1fr auto;border-top:1px solid var(--rule)}
@@ -73,18 +73,21 @@ ul.plain{margin:0;padding-left:1.2em;display:grid;gap:6px}
 details{border-bottom:1px solid var(--rule);padding:10px 0}
 summary{cursor:pointer;font-weight:700}
 details p{margin-top:8px;color:var(--sub)}
+img.cover{display:block;width:100%;height:auto;border:1px solid var(--rule);margin-bottom:8px}
 footer{border-top:2px solid var(--ink);padding-top:16px;color:var(--sub);font-size:.85rem;display:grid;gap:6px}
 
 @media (max-width:720px){.sec{grid-template-columns:1fr;gap:12px}}
 @media (prefers-reduced-motion:no-preference){.btn{transition:background .15s,color .15s}.btn:hover{background:var(--accent);color:var(--paper)}}
 </style>
 <meta property="og:title" content="経理Excelのゼロ">
-<meta property="og:description" content="溜まった記帳と毎月の記帳を、会計ソフトに取り込む形にしてお渡しします。決算・申告書の実務17年以上。お申し込みはココナラから。">
+<meta property="og:description" content="溜まった記帳と毎月の記帳を、会計ソフトに取り込む形にしてお渡しします。会計ソフトの自動仕訳の確認と直しも。決算・申告書の実務17年以上。お申し込みはココナラから。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://keiri-excel-zero.github.io/">
+<meta property="og:image" content="https://keiri-excel-zero.github.io/cover.jpg">
 </head>
 <body><div class="wrap">
   <header class="top">
+    <img class="cover" src="cover.jpg" width="1600" height="525" alt="溜まった記帳 1年分も 確定申告の前に片付け 実務17年">
     <div class="brand"><span class="mark" aria-hidden="true">0</span>経理Excelのゼロ</div>
     <h1>溜まった記帳を、会計ソフトに入る形にしてお渡しします</h1>
     <p class="lead">通帳・カードの明細と、領収書・レシートの写真を送っていただくだけです。仕訳を作り、お使いの会計ソフトに取り込むファイルと、同じ中身のExcelの仕訳帳でお渡しします。決めきれない取引は、こちらで決めずに一覧にします。</p>
@@ -142,8 +145,15 @@ footer{border-top:2px solid var(--ink);padding-top:16px;color:var(--sub);font-si
           </dl>
           <p class="note">写真の分は月50件まで込み。超える月は50件ごとに2,000円。</p>
         </article>
+        <article class="price">
+          <h3>自動仕訳・AI仕訳の確認と直し（1年分）</h3>
+          <dl>
+            <dt>仕訳500件まで</dt><dd class="num">10,000円</dd>
+          </dl>
+          <p class="note">会計ソフトの仕訳を1年分見て、直した方がよい仕訳の一覧（Excel）と、残高を突き合わせた表をお渡しします。ソフトに招待していただいた場合は、ソフトの中で直すところまでします。<a href="https://coconala.com/services/4474218" target="_blank" rel="noopener">ココナラで見る</a></p>
+        </article>
       </div>
-      <p class="note">料金はココナラの出品ページの料金です。件数が分からないときは、見積り相談で明細の行数とレシートのおよその枚数を教えてください。</p>
+      <p class="note">料金はココナラの出品ページの料金です。件数が分からないときは、見積り相談で明細の行数とレシートのおよその枚数を教えてください（仕訳の確認と直しは、会計ソフトの仕訳の件数を）。</p>
     </div>
   </section>
 
@@ -152,7 +162,7 @@ footer{border-top:2px solid var(--ink);padding-top:16px;color:var(--sub);font-si
     <div class="body">
       <ol class="flow">
         <li><span>ココナラの見積り相談（無料）で、会計ソフト・対象の期間・資料のおよその量を教えてください。お値段をお伝えします</span></li>
-        <li><span>ご購入の後、ココナラのメッセージで明細と写真を送っていただきます</span></li>
+        <li><span>ご購入の後、ココナラのメッセージで明細と写真を送っていただきます（仕訳の確認と直しは、会計ソフトから書き出した仕訳帳か、ソフトへの招待）</span></li>
         <li><span>仕訳を作り、通帳とカードの残高を帳簿と照らします</span></li>
         <li><span>取り込むファイル・Excelの仕訳帳・確認していただきたい取引の一覧をお渡しします</span></li>
       </ol>
@@ -184,7 +194,7 @@ footer{border-top:2px solid var(--ink);padding-top:16px;color:var(--sub);font-si
     <div class="body">
       <details><summary>会計ソフトを使っていなくても頼めますか？</summary><p>はい。同じ中身のExcelの仕訳帳でお渡しします。税理士さんにそのまま渡せます。</p></details>
       <details><summary>どの会計ソフトに対応していますか？</summary><p>お使いの会計ソフトの取り込みの形に合わせてお作りします。やよいの青色申告 オンラインとマネーフォワードは、取り込めることを確かめています。最初は数行だけの「試し」で取り込めるのを確かめていただきます。</p></details>
-      <details><summary>会計ソフトへの取り込みもしてもらえますか？</summary><p>はい。お使いの会計ソフトに招待していただければ、取り込みまでこちらでします（招待の機能が使えるかは、ソフトとプランによります）。招待用のメールアドレスはココナラのトークルームでお伝えし、取り込みのためだけに使います。お取引が完了したら、招待は外してください。</p></details>
+      <details><summary>会計ソフトへの取り込みもしてもらえますか？</summary><p>はい。お使いの会計ソフトに招待していただければ、取り込みまでこちらでします（招待の機能が使えるかは、ソフトとプランによります）。招待用のメールアドレスはココナラのトークルームでお伝えし、取り込み・仕訳の直しのためだけに使います。お取引が完了したら、招待は外してください。</p></details>
       <details><summary>分からない取引はどうなりますか？</summary><p>こちらでは決めずに、確認していただきたい取引の一覧にしてお渡しします。一覧の取引は取り込みません。</p></details>
     </div>
   </section>
