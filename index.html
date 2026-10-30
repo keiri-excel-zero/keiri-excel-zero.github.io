@@ -35,7 +35,7 @@ a:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-of
 
 header.top{display:grid;gap:20px;border-bottom:2px solid var(--ink);padding-bottom:28px}
 .brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:900;font-size:1.05rem;letter-spacing:.04em}
-.mark{width:40px;height:40px;border:2px solid var(--ink);display:grid;place-items:center;font-family:var(--mono);font-weight:600;font-size:1.3rem}
+.mark{width:48px;height:48px;border-radius:50%;display:block;flex:none}
 .top h1{font-size:clamp(1.9rem,5.2vw,3rem);font-weight:900}
 .lead{max-width:40em;color:var(--sub)}
 .cta{display:flex;flex-wrap:wrap;gap:12px}
@@ -84,11 +84,12 @@ footer{border-top:2px solid var(--ink);padding-top:16px;color:var(--sub);font-si
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://keiri-excel-zero.github.io/">
 <meta property="og:image" content="https://keiri-excel-zero.github.io/cover.jpg">
+<link rel="icon" href="logo.png" type="image/png">
 </head>
 <body><div class="wrap">
   <header class="top">
     <img class="cover" src="cover.jpg" width="1600" height="525" alt="溜まった記帳 1年分も 確定申告の前に片付け 実務17年">
-    <div class="brand"><span class="mark" aria-hidden="true">0</span>経理Excelのゼロ</div>
+    <div class="brand"><img class="mark" src="logo.png" width="48" height="48" alt="">経理Excelのゼロ</div>
     <h1>溜まった記帳を、会計ソフトに入る形にしてお渡しします</h1>
     <p class="lead">通帳・カードの明細と、領収書・レシートの写真を送っていただくだけです。仕訳を作り、お使いの会計ソフトに取り込むファイルと、同じ中身のExcelの仕訳帳でお渡しします。決めきれない取引は、こちらで決めずに一覧にします。</p>
     <div class="cta">
